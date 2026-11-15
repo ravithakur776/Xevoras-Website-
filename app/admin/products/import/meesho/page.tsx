@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { AdminLayout } from '@/components/admin/AdminLayout';
 import { formatINR } from '@/lib/utils/format';
+import { normalizeImageUrl } from '@/lib/utils/image';
 import {
   Link2,
   ExternalLink,
@@ -142,9 +143,10 @@ function MeeshoAutoImportContent() {
         if (text) {
           if (text.includes('meesho.com') && (text.includes('/p/') || text.includes('/s/'))) {
             setUrl(text);
-          } else if (text.startsWith('http') && (text.includes('images.meesho.com') || text.match(/\.(jpg|jpeg|png|webp)/i))) {
-            setEditableImage(text);
-            setSpeedImage(text);
+          } else if (text.startsWith('http') && (text.includes('images.meesho.com') || text.match(/\.(jpg|jpeg|png|webp|avif)/i))) {
+            const clean = normalizeImageUrl(text);
+            setEditableImage(clean);
+            setSpeedImage(clean);
           }
         }
       }
@@ -463,7 +465,11 @@ function MeeshoAutoImportContent() {
                 <input
                   type="url"
                   value={speedImage}
-                  onChange={(e) => setSpeedImage(e.target.value)}
+                  onChange={(e) => {
+                    const clean = normalizeImageUrl(e.target.value);
+                    setSpeedImage(clean);
+                    if (clean) setEditableImage(clean);
+                  }}
                   placeholder="Paste Real Meesho Image Address (Right-click photo -> Copy Image Address)"
                   className="w-full bg-obsidian border border-white/10 rounded-lg pl-8 pr-3 py-2 text-xs text-ivory placeholder-stone/40 focus:outline-none focus:border-gold font-mono"
                 />
@@ -606,7 +612,11 @@ function MeeshoAutoImportContent() {
                   <input
                     type="url"
                     value={editableImage}
-                    onChange={(e) => setEditableImage(e.target.value)}
+                    onChange={(e) => {
+                      const clean = normalizeImageUrl(e.target.value);
+                      setEditableImage(clean);
+                      setSpeedImage(clean);
+                    }}
                     placeholder="Right-click photo on Meesho -> Copy Image Address -> paste here"
                     className="w-full bg-obsidian border border-white/10 rounded-lg px-3 py-2 text-xs text-ivory placeholder-stone/30 focus:outline-none focus:border-gold font-mono"
                   />

@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { Product } from '@/lib/types';
 import { formatINR, calculateDiscount } from '@/lib/utils/format';
+import { normalizeImageUrl } from '@/lib/utils/image';
 import { useCart } from '@/lib/store/cartContext';
 import { useWishlist } from '@/lib/store/wishlistContext';
 import { ProductCard } from '@/components/storefront/ProductCard';
@@ -41,7 +42,8 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
 
   const isFavorited = isInWishlist(product.id);
   const discount = calculateDiscount(product.pricePaise, product.compareAtPricePaise);
-  const currentImage = product.images[activeImageIndex]?.url || product.images[0]?.url || '/media/products/women-1.jpg';
+  const rawImage = product.images[activeImageIndex]?.url || product.images[0]?.url || '/media/products/women-1.jpg';
+  const currentImage = normalizeImageUrl(rawImage);
 
   const handleAddToCart = () => {
     if (!selectedVariant) return;
@@ -96,7 +98,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
                   activeImageIndex === idx ? 'border-gold shadow-gold' : 'border-white/10 opacity-70 hover:opacity-100'
                 }`}
               >
-                <Image src={img.url} alt={img.alt || product.name} fill className="object-cover" unoptimized />
+                <Image src={normalizeImageUrl(img.url)} alt={img.alt || product.name} fill className="object-cover" unoptimized />
               </button>
             ))}
           </div>

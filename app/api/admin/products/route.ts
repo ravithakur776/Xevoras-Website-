@@ -280,7 +280,11 @@ export async function POST(req: NextRequest) {
       const variantList = variants.length > 0 ? variants : defaultVariants;
 
       for (const v of variantList) {
-        const variantSku = v.sku || `XV-${finalSlug.toUpperCase()}-${v.size}-${Math.floor(100 + Math.random() * 900)}`;
+        let variantSku = v.sku || `XV-${finalSlug.slice(0, 10).toUpperCase()}-${String(v.size || 'M').toUpperCase().replace(/[^A-Z0-9]/g, '')}`;
+        const existingSku = await tx.productVariant.findUnique({ where: { sku: variantSku } });
+        if (existingSku) {
+          variantSku = `${variantSku}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+        }
         await tx.productVariant.create({
           data: {
             productId: product.id,

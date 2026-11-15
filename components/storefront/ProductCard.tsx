@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { Heart, Sparkles, Box, Check } from 'lucide-react';
 import { Product } from '@/lib/types';
 import { formatINR, calculateDiscount } from '@/lib/utils/format';
+import { normalizeImageUrl } from '@/lib/utils/image';
 import { useWishlist } from '@/lib/store/wishlistContext';
 import { useCart } from '@/lib/store/cartContext';
 
@@ -23,8 +24,8 @@ export function ProductCard({ product }: ProductCardProps) {
 
   const isFavorited = isInWishlist(product.id);
   const discount = calculateDiscount(product.pricePaise, product.compareAtPricePaise);
-  const primaryImg = product.images[0]?.url || '/media/products/women-1.jpg';
-  const hoverImg = product.images[1]?.url || primaryImg;
+  const primaryImg = normalizeImageUrl(product.images[0]?.url || '/media/products/women-1.jpg');
+  const hoverImg = product.images[1]?.url ? normalizeImageUrl(product.images[1].url) : primaryImg;
 
   const handleQuickAdd = (size: string, e: React.MouseEvent) => {
     e.stopPropagation();

@@ -75,136 +75,6 @@
   ],
   "products": [
     {
-      "id": "cmwi22duy0001ord2swvfshhb",
-      "name": "Men Colorblock Casual Jacket",
-      "slug": "men-colorblock-casual-jacket-78jujd",
-      "description": "Crafted with uncompromising precision, the Men Colorblock Casual Jacket embodies XEVORAS's philosophy of 'Always Rare · हटके हमेशा'.\n\nSilhouette & Design:\n• Cut in Premium Verified Apparel Fabrication with a flattering comfort tailored luxury fit.\n• Detailed with refined detailing engineered for modern luxury styling.\n• Tailored specifically for contemporary casual luxury.\n\nFabrication & Care:\n• Material: High-grade textile curated for exceptional drape, durability, and breathability.\n• Care: Dry clean recommended or machine wash cold inside out. Steam press gently.\n• Origin: Verified Indian artisan cluster, curated and authenticated by the XEVORAS Sourcing Atelier.",
-      "shortDescription": "Premium Verified Apparel Fabrication · Comfort Tailored Luxury Fit · Always Rare",
-      "gender": "men",
-      "pricePaise": 139900,
-      "compareAtPricePaise": 293790,
-      "material": "Premium Verified Apparel Fabrication",
-      "fit": "Comfort Tailored Luxury Fit",
-      "pattern": "Refined Detailing",
-      "care": "Dry clean recommended or machine wash cold. Steam iron on reverse.",
-      "keywords": "men colorblock casual jacket men xevoras",
-      "featured": true,
-      "category": "men-outerwear",
-      "categoryName": "Outerwear",
-      "images": [
-        {
-          "url": "/media/products/men-5.jpg",
-          "alt": "Men Colorblock Casual Jacket - Front View"
-        }
-      ],
-      "variants": [
-        {
-          "sku": "XV-JKT-78JUJD-S",
-          "size": "S",
-          "colorName": "Standard",
-          "colorHex": "#17140f",
-          "stock": 15
-        },
-        {
-          "sku": "XV-JKT-78JUJD-M",
-          "size": "M",
-          "colorName": "Standard",
-          "colorHex": "#17140f",
-          "stock": 25
-        },
-        {
-          "sku": "XV-JKT-78JUJD-L",
-          "size": "L",
-          "colorName": "Standard",
-          "colorHex": "#17140f",
-          "stock": 30
-        },
-        {
-          "sku": "XV-JKT-78JUJD-XL",
-          "size": "XL",
-          "colorName": "Standard",
-          "colorHex": "#17140f",
-          "stock": 20
-        },
-        {
-          "sku": "XV-JKT-78JUJD-XXL",
-          "size": "XXL",
-          "colorName": "Standard",
-          "colorHex": "#17140f",
-          "stock": 10
-        }
-      ],
-      "status": "published",
-      "sourcingType": "MEESHO",
-      "supplierSourceUrl": "https://www.meesho.com/men-colorblock-casual-jacket/p/78jujd",
-      "costPricePaise": 39900
-    },
-    {
-      "id": "cmwhybtey0003oram3rlnao4d",
-      "name": "Comfy Retro Women Jeans",
-      "slug": "comfy-retro-women-jeans-8ouk4u",
-      "description": "Crafted with uncompromising precision, the Comfy Retro Women Jeans embodies XEVORAS's philosophy of 'Always Rare · हटके हमेशा'.\n\nSilhouette & Design:\n• Cut in 100% Ring-Spun Cotton Heavyweight Denim Twill with a flattering comfort tailored luxury fit.\n• Detailed with vintage stonewash finish engineered for modern luxury styling.\n• Tailored specifically for casual everyday & modern streetwear.\n\nFabrication & Care:\n• Material: High-grade textile curated for exceptional drape, durability, and breathability.\n• Care: Dry clean recommended or machine wash cold inside out. Steam press gently.\n• Origin: Verified Indian artisan cluster, curated and authenticated by the XEVORAS Sourcing Atelier.",
-      "shortDescription": "100% Ring-Spun Cotton Heavyweight Denim Twill · Comfort Tailored Luxury Fit · Always Rare",
-      "gender": "women",
-      "pricePaise": 52000,
-      "compareAtPricePaise": 109200,
-      "material": "100% Ring-Spun Cotton Heavyweight Denim Twill",
-      "fit": "Comfort Tailored Luxury Fit",
-      "pattern": "Vintage Stonewash Finish",
-      "care": "Dry clean recommended or machine wash cold. Steam iron on reverse.",
-      "keywords": "comfy retro women jeans women xevoras",
-      "featured": true,
-      "category": "women-trousers",
-      "categoryName": "Trousers",
-      "images": [
-        {
-          "url": "https://images.meesho.com/images/products/525465966/wxhm2_512.avif?width=512",
-          "alt": "Comfy Retro Women Jeans - Front View"
-        }
-      ],
-      "variants": [
-        {
-          "sku": "XV-JEAN-8OUK4U-26",
-          "size": "26",
-          "colorName": "Standard",
-          "colorHex": "#17140f",
-          "stock": 20
-        },
-        {
-          "sku": "XV-JEAN-8OUK4U-28",
-          "size": "28",
-          "colorName": "Standard",
-          "colorHex": "#17140f",
-          "stock": 20
-        },
-        {
-          "sku": "XV-JEAN-8OUK4U-30",
-          "size": "30",
-          "colorName": "Standard",
-          "colorHex": "#17140f",
-          "stock": 20
-        },
-        {
-          "sku": "XV-JEAN-8OUK4U-32",
-          "size": "32",
-          "colorName": "Standard",
-          "colorHex": "#17140f",
-          "stock": 20
-        },
-        {
-          "sku": "XV-JEAN-8OUK4U-34",
-          "size": "34",
-          "colorName": "Standard",
-          "colorHex": "#17140f",
-          "stock": 20
-        }
-      ],
-      "status": "published",
-      "sourcingType": "MEESHO",
-      "supplierSourceUrl": "https://www.meesho.com/comfy-retro-women-jeans/p/8ouk4u",
-      "costPricePaise": 21000
-    },
-    {
       "id": "cmwhxvz8y0001or5545rqla42",
       "name": "Preety Women Lower Trackpant Women Palazzo Pack 2",
       "slug": "preety-women-lower-trackpant-women-palazzo-pack-2-8swzgj",
@@ -212,19 +82,27 @@
       "shortDescription": "Ultra-Comfort Breathable Cotton-Elastane Soft Stretch Fabric · Comfort Tailored Luxury Fit · Always Rare",
       "gender": "women",
       "pricePaise": 86700,
-      "compareAtPricePaise": 182070,
+      "compareAtPricePaise": 182000,
+      "costPricePaise": 43100,
       "material": "Ultra-Comfort Breathable Cotton-Elastane Soft Stretch Fabric",
       "fit": "Comfort Tailored Luxury Fit",
       "pattern": "Refined Detailing",
       "care": "Dry clean recommended or machine wash cold. Steam iron on reverse.",
       "keywords": "preety women lower trackpant women palazzo pack 2 women xevoras",
       "featured": true,
+      "isNewArrival": true,
+      "isTrending": true,
+      "status": "published",
       "category": "women-trousers",
       "categoryName": "Trousers",
+      "sourcing": "meesho",
+      "supplierStatus": "VERIFIED",
+      "supplierSourceUrl": "https://www.meesho.com/preety-women-lowertrackpantwomen-plazzo-pack-2/p/8swzgj",
       "images": [
         {
-          "url": "https://images.meesho.com/images/products/532297603/vjbwn_512.avif?width=512",
-          "alt": "Preety Women Lower Trackpant Women Palazzo Pack 2 - Front View"
+          "url": "https://images.meesho.com/images/products/532297603/vjbwn_512.jpg",
+          "alt": "Preety Women Lower Trackpant Women Palazzo Pack 2 - Front View",
+          "isCover": true
         }
       ],
       "variants": [
@@ -270,12 +148,147 @@
           "colorHex": "#17140f",
           "stock": 25
         }
-      ],
+      ]
+    },
+    {
+      "id": "cmwi22duy0001ord2swvfshhb",
+      "name": "Men Colorblock Casual Jacket",
+      "slug": "men-colorblock-casual-jacket-78jujd",
+      "description": "Crafted with uncompromising precision, the Men Colorblock Casual Jacket embodies XEVORAS's philosophy of 'Always Rare · हटके हमेशा'.\n\nSilhouette & Design:\n• Cut in Premium Verified Apparel Fabrication with a flattering comfort tailored luxury fit.\n• Detailed with refined detailing engineered for modern luxury styling.\n• Tailored specifically for contemporary casual luxury.\n\nFabrication & Care:\n• Material: High-grade textile curated for exceptional drape, durability, and breathability.\n• Care: Dry clean recommended or machine wash cold inside out. Steam press gently.\n• Origin: Verified Indian artisan cluster, curated and authenticated by the XEVORAS Sourcing Atelier.",
+      "shortDescription": "Premium Verified Apparel Fabrication · Comfort Tailored Luxury Fit · Always Rare",
+      "gender": "men",
+      "pricePaise": 103200,
+      "compareAtPricePaise": 216700,
+      "costPricePaise": 42000,
+      "material": "Premium Verified Apparel Fabrication",
+      "fit": "Comfort Tailored Luxury Fit",
+      "pattern": "Refined Detailing",
+      "care": "Dry clean recommended or machine wash cold. Steam iron on reverse.",
+      "keywords": "men colorblock casual jacket men xevoras",
+      "featured": true,
+      "isNewArrival": true,
+      "isTrending": true,
       "status": "published",
-      "sourcingType": "MEESHO",
-      "supplierSourceUrl": "https://www.meesho.com/preety-women-lowertrackpantwomen-plazzo-pack-2/p/8swzgj",
-      "costPricePaise": 43100
+      "category": "men-outerwear",
+      "categoryName": "Outerwear",
+      "sourcing": "meesho",
+      "supplierStatus": "VERIFIED",
+      "supplierSourceUrl": "https://www.meesho.com/men-colorblock-casual-jacket/p/78jujd",
+      "images": [
+        {
+          "url": "https://images.meesho.com/images/products/437626201/mq3du_512.jpg",
+          "alt": "Men Colorblock Casual Jacket - Front View",
+          "isCover": true
+        }
+      ],
+      "variants": [
+        {
+          "sku": "XV-MEE-78JUJD-S",
+          "size": "S",
+          "colorName": "Standard",
+          "colorHex": "#17140f",
+          "stock": 15
+        },
+        {
+          "sku": "XV-MEE-78JUJD-M",
+          "size": "M",
+          "colorName": "Standard",
+          "colorHex": "#17140f",
+          "stock": 25
+        },
+        {
+          "sku": "XV-MEE-78JUJD-L",
+          "size": "L",
+          "colorName": "Standard",
+          "colorHex": "#17140f",
+          "stock": 30
+        },
+        {
+          "sku": "XV-MEE-78JUJD-XL",
+          "size": "XL",
+          "colorName": "Standard",
+          "colorHex": "#17140f",
+          "stock": 20
+        },
+        {
+          "sku": "XV-MEE-78JUJD-XXL",
+          "size": "XXL",
+          "colorName": "Standard",
+          "colorHex": "#17140f",
+          "stock": 10
+        }
+      ]
+    },
+    {
+      "id": "cmwhybtey0003oram3rlnao4d",
+      "name": "Comfy Retro Women Jeans",
+      "slug": "comfy-retro-women-jeans-8ouk4u",
+      "description": "Crafted with uncompromising precision, the Comfy Retro Women Jeans embodies XEVORAS's philosophy of 'Always Rare · हटके हमेशा'.\n\nSilhouette & Design:\n• Cut in 100% Ring-Spun Cotton Heavyweight Denim Twill with a flattering comfort tailored luxury fit.\n• Detailed with vintage stonewash finish engineered for modern luxury styling.\n• Tailored specifically for casual everyday & modern streetwear.\n\nFabrication & Care:\n• Material: High-grade textile curated for exceptional drape, durability, and breathability.\n• Care: Dry clean recommended or machine wash cold inside out. Steam press gently.\n• Origin: Verified Indian artisan cluster, curated and authenticated by the XEVORAS Sourcing Atelier.",
+      "shortDescription": "100% Ring-Spun Cotton Heavyweight Denim Twill · Comfort Tailored Luxury Fit · Always Rare",
+      "gender": "women",
+      "pricePaise": 52000,
+      "compareAtPricePaise": 109200,
+      "costPricePaise": 21000,
+      "material": "100% Ring-Spun Cotton Heavyweight Denim Twill",
+      "fit": "Comfort Tailored Luxury Fit",
+      "pattern": "Vintage Stonewash Finish",
+      "care": "Dry clean recommended or machine wash cold. Steam iron on reverse.",
+      "keywords": "comfy retro women jeans women xevoras",
+      "featured": true,
+      "isNewArrival": true,
+      "isTrending": true,
+      "status": "published",
+      "category": "women-trousers",
+      "categoryName": "Trousers",
+      "sourcing": "meesho",
+      "supplierStatus": "VERIFIED",
+      "supplierSourceUrl": "https://www.meesho.com/comfy-retro-women-jeans/p/8ouk4u",
+      "images": [
+        {
+          "url": "https://images.meesho.com/images/products/525465966/wxhm2_512.jpg",
+          "alt": "Comfy Retro Women Jeans - Front View",
+          "isCover": true
+        }
+      ],
+      "variants": [
+        {
+          "sku": "XV-JEAN-8OUK4U-26",
+          "size": "26",
+          "colorName": "Standard",
+          "colorHex": "#17140f",
+          "stock": 20
+        },
+        {
+          "sku": "XV-JEAN-8OUK4U-28",
+          "size": "28",
+          "colorName": "Standard",
+          "colorHex": "#17140f",
+          "stock": 20
+        },
+        {
+          "sku": "XV-JEAN-8OUK4U-30",
+          "size": "30",
+          "colorName": "Standard",
+          "colorHex": "#17140f",
+          "stock": 20
+        },
+        {
+          "sku": "XV-JEAN-8OUK4U-32",
+          "size": "32",
+          "colorName": "Standard",
+          "colorHex": "#17140f",
+          "stock": 20
+        },
+        {
+          "sku": "XV-JEAN-8OUK4U-34",
+          "size": "34",
+          "colorName": "Standard",
+          "colorHex": "#17140f",
+          "stock": 20
+        }
+      ]
     }
   ],
-  "lastUpdated": "2026-11-15T16:37:19.081Z"
+  "lastUpdated": "2026-11-15T16:37:19.081Z",
+  "updatedAt": "2026-11-15T17:14:04.123Z"
 }

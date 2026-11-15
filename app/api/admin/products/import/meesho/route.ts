@@ -5,6 +5,7 @@ import { prisma } from '@/lib/db/prisma';
 import { revalidatePath } from 'next/cache';
 import { CatalogueSyncService } from '@/lib/services/catalogueSync.service';
 import { CatalogService } from '@/lib/services/catalog.service';
+import { normalizeImageUrl } from '@/lib/utils/image';
 
 export async function POST(req: NextRequest) {
   try {
@@ -28,14 +29,21 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: validation.error || 'Invalid Meesho link' }, { status: 400 });
     }
 
+    const sanitizedCustomImage = customImageUrl ? normalizeImageUrl(customImageUrl) : undefined;
+
     // 1. AUTOFILL ACTION
     if (action === 'autofill') {
       const generated = MeeshoAdapter.parseAndGenerateProduct(
         validation.cleanUrl,
-        customImageUrl,
+        sanitizedCustomImage,
         customCostPaise,
         customPricePaise
       );
+
+      generated.coverImage = normalizeImageUrl(generated.coverImage);
+      if (Array.isArray(generated.galleryImages)) {
+        generated.galleryImages = generated.galleryImages.map((img) => normalizeImageUrl(img));
+      }
 
       return NextResponse.json({
         success: true,
@@ -43,17 +51,21 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // 2. PUBLISH ACTION (1-Click Publish to Database & Live Storefront)
+    // 2. PUBLISH ACTION (1-Click Publish or Update to Database & Live Storefront)
     if (action === 'publish' || action === 'instant_publish') {
       // If productData was passed from frontend form use it, else generate fresh from URL
       const dataToSave = productData?.name
-        ? productData
+        ? { ...productData }
         : MeeshoAdapter.parseAndGenerateProduct(
             validation.cleanUrl,
-            customImageUrl,
+            sanitizedCustomImage,
             customCostPaise,
             customPricePaise
           );
+
+      // Normalize images
+      const coverImg = normalizeImageUrl(dataToSave.coverImage || sanitizedCustomImage || '/media/products/women-1.jpg');
+      dataToSave.coverImage = coverImg;
 
       // Verify category exists in DB (fallback to women-dresses if not found)
       let categoryId = dataToSave.categoryId;
@@ -63,168 +75,256 @@ export async function POST(req: NextRequest) {
         categoryId = fallbackCat ? fallbackCat.id : 'women-dresses';
       }
 
-      // Check for slug collision; if exists, append random suffix
-      let uniqueSlug = dataToSave.slug;
-      const existingProduct = await prisma.product.findUnique({ where: { slug: uniqueSlug } });
-      if (existingProduct) {
-        uniqueSlug = `${uniqueSlug}-${Math.random().toString(36).substring(2, 6)}`;
-      }
+      // Check if product already exists by exact cleanUrl or slug
+      const cleanUrl = validation.cleanUrl;
+      const existingProduct = await prisma.product.findFirst({
+        where: {
+          OR: [
+            { slug: dataToSave.slug },
+            { supplierSourceUrl: cleanUrl },
+          ],
+        },
+        include: {
+          variants: true,
+          media: true,
+        },
+      });
 
-      // Execute Atomic Database Transaction
-      const createdProduct = await prisma.$transaction(async (tx) => {
-        // 1. Create Product
-        const prod = await tx.product.create({
-          data: {
-            name: dataToSave.name,
-            slug: uniqueSlug,
-            description: dataToSave.description,
-            shortDescription: `${dataToSave.fabric} · ${dataToSave.fit} · Always Rare`,
-            gender: dataToSave.gender,
-            categoryId,
-            pricePaise: Number(dataToSave.pricePaise) || 189900,
-            compareAtPricePaise: Number(dataToSave.compareAtPricePaise) || 399900,
-            costPricePaise: Number(dataToSave.costPricePaise) || 49900,
-            shippingCostPaise: 7000,
-            packagingCostPaise: 3000,
-            brand: 'XEVORAS',
-            productType: 'Apparel',
-            fabric: dataToSave.fabric,
-            pattern: dataToSave.pattern,
-            fit: dataToSave.fit,
-            occasion: dataToSave.occasion,
-            sleeveType: dataToSave.sleeveType || 'Comfort Tailored',
-            neckType: dataToSave.neckType || 'Classic Elegant',
-            careInstructions: dataToSave.careInstructions,
-            status: 'PUBLISHED',
-            featured: true,
-            isNewArrival: true,
-            isTrending: true,
-            sourcingType: 'MEESHO',
-            supplierStatus: 'VERIFIED',
-            supplierSourceUrl: validation.cleanUrl,
-            supplierNotes: `Auto-imported from Meesho link: ${validation.cleanUrl}. Product ID: ${validation.sourceProductId}`,
-            supplierVerificationDate: new Date(),
-          },
-        });
+      // Prepare variants list
+      const rawVariants = Array.isArray(dataToSave.variants) && dataToSave.variants.length > 0
+        ? dataToSave.variants
+        : [
+            { size: 'S', stockCount: 15 },
+            { size: 'M', stockCount: 25 },
+            { size: 'L', stockCount: 30 },
+            { size: 'XL', stockCount: 20 },
+            { size: 'XXL', stockCount: 10 },
+          ];
 
-        // 2. Create Media Images
-        const coverImg = dataToSave.coverImage || '/media/products/women-1.jpg';
-        await tx.productMedia.create({
-          data: {
-            productId: prod.id,
-            url: coverImg,
-            altText: `${prod.name} - Front View`,
-            sortOrder: 0,
-            isCover: true,
-          },
-        });
+      // Execute Atomic Database Transaction (Upsert / Update or Create)
+      const savedProduct = await prisma.$transaction(async (tx) => {
+        let prod: any;
 
-        // Additional gallery images if any
-        if (Array.isArray(dataToSave.galleryImages)) {
-          for (let i = 0; i < dataToSave.galleryImages.length; i++) {
-            const imgUrl = dataToSave.galleryImages[i];
-            if (imgUrl && imgUrl !== coverImg) {
-              await tx.productMedia.create({
-                data: {
-                  productId: prod.id,
-                  url: imgUrl,
-                  altText: `${prod.name} - View ${i + 1}`,
-                  sortOrder: i + 1,
-                  isCover: false,
-                },
-              });
+        if (existingProduct) {
+          // --- UPDATE PATH ---
+          prod = await tx.product.update({
+            where: { id: existingProduct.id },
+            data: {
+              name: dataToSave.name,
+              description: dataToSave.description,
+              shortDescription: `${dataToSave.fabric} · ${dataToSave.fit} · Always Rare`,
+              gender: dataToSave.gender,
+              categoryId,
+              pricePaise: Number(dataToSave.pricePaise) || existingProduct.pricePaise,
+              compareAtPricePaise: Number(dataToSave.compareAtPricePaise) || existingProduct.compareAtPricePaise,
+              costPricePaise: Number(dataToSave.costPricePaise) || existingProduct.costPricePaise,
+              fabric: dataToSave.fabric,
+              pattern: dataToSave.pattern,
+              fit: dataToSave.fit,
+              occasion: dataToSave.occasion,
+              sleeveType: dataToSave.sleeveType || 'Comfort Tailored',
+              neckType: dataToSave.neckType || 'Classic Elegant',
+              careInstructions: dataToSave.careInstructions,
+              status: 'PUBLISHED',
+              featured: true,
+              isNewArrival: true,
+              isTrending: true,
+              sourcingType: 'MEESHO',
+              supplierStatus: 'VERIFIED',
+              supplierSourceUrl: cleanUrl,
+              supplierNotes: `Auto-updated from Meesho link: ${cleanUrl}. Sourcing cost: ₹${((Number(dataToSave.costPricePaise) || 49900) / 100).toFixed(0)}`,
+              supplierVerificationDate: new Date(),
+              updatedAt: new Date(),
+            },
+          });
+
+          // Replace Media
+          await tx.productMedia.deleteMany({ where: { productId: prod.id } });
+          await tx.productMedia.create({
+            data: {
+              productId: prod.id,
+              url: coverImg,
+              altText: `${prod.name} - Front View`,
+              sortOrder: 0,
+              isCover: true,
+            },
+          });
+
+          // Replace Variants safely with guaranteed collision-free SKUs
+          await tx.productVariant.deleteMany({ where: { productId: prod.id } });
+          for (const v of rawVariants) {
+            let variantSku = `XV-${prod.slug.slice(0, 10).toUpperCase()}-${String(v.size).toUpperCase().replace(/[^A-Z0-9]/g, '')}`;
+            const skuCollision = await tx.productVariant.findUnique({ where: { sku: variantSku } });
+            if (skuCollision) {
+              variantSku = `${variantSku}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
             }
+
+            await tx.productVariant.create({
+              data: {
+                productId: prod.id,
+                size: String(v.size),
+                sku: variantSku,
+                colorName: 'Standard',
+                costPricePaise: Number(dataToSave.costPricePaise) || 49900,
+                sellingPricePaise: Number(dataToSave.pricePaise) || prod.pricePaise,
+                stockCount: Number(v.stockCount) || 20,
+                available: true,
+                status: 'ACTIVE',
+              },
+            });
           }
-        }
 
-        // 3. Create Variants (S, M, L, XL, XXL)
-        const variantsList = Array.isArray(dataToSave.variants) && dataToSave.variants.length > 0
-          ? dataToSave.variants
-          : [
-              { size: 'S', sku: `XV-MEE-${validation.sourceProductId}-S`, stockCount: 15, pricePaise: prod.pricePaise },
-              { size: 'M', sku: `XV-MEE-${validation.sourceProductId}-M`, stockCount: 25, pricePaise: prod.pricePaise },
-              { size: 'L', sku: `XV-MEE-${validation.sourceProductId}-L`, stockCount: 30, pricePaise: prod.pricePaise },
-              { size: 'XL', sku: `XV-MEE-${validation.sourceProductId}-XL`, stockCount: 20, pricePaise: prod.pricePaise },
-              { size: 'XXL', sku: `XV-MEE-${validation.sourceProductId}-XXL`, stockCount: 10, pricePaise: prod.pricePaise },
-            ];
+          // Update reselling product tracking if present
+          const existingReselling = await tx.resellingProduct.findFirst({ where: { productId: prod.id } });
+          if (existingReselling) {
+            await tx.resellingProduct.update({
+              where: { id: existingReselling.id },
+              data: {
+                supplierUrl: cleanUrl,
+                supplierCostPaise: Number(dataToSave.costPricePaise) || 49900,
+                priceVerifiedAt: new Date(),
+              },
+            });
+          }
 
-        for (const v of variantsList) {
-          await tx.productVariant.create({
+        } else {
+          // --- CREATE PATH ---
+          let uniqueSlug = dataToSave.slug;
+          const slugExists = await tx.product.findUnique({ where: { slug: uniqueSlug } });
+          if (slugExists) {
+            uniqueSlug = `${uniqueSlug}-${Math.random().toString(36).substring(2, 6)}`;
+          }
+
+          prod = await tx.product.create({
             data: {
-              productId: prod.id,
-              size: v.size,
-              sku: v.sku || `XV-MEE-${prod.id.slice(-5)}-${v.size}`,
-              colorName: 'Standard',
+              name: dataToSave.name,
+              slug: uniqueSlug,
+              description: dataToSave.description,
+              shortDescription: `${dataToSave.fabric} · ${dataToSave.fit} · Always Rare`,
+              gender: dataToSave.gender,
+              categoryId,
+              pricePaise: Number(dataToSave.pricePaise) || 189900,
+              compareAtPricePaise: Number(dataToSave.compareAtPricePaise) || 399900,
               costPricePaise: Number(dataToSave.costPricePaise) || 49900,
-              sellingPricePaise: Number(dataToSave.pricePaise) || prod.pricePaise,
-              stockCount: Number(v.stockCount) || 20,
-              available: true,
-              status: 'ACTIVE',
+              shippingCostPaise: 7000,
+              packagingCostPaise: 3000,
+              brand: 'XEVORAS',
+              productType: 'Apparel',
+              fabric: dataToSave.fabric,
+              pattern: dataToSave.pattern,
+              fit: dataToSave.fit,
+              occasion: dataToSave.occasion,
+              sleeveType: dataToSave.sleeveType || 'Comfort Tailored',
+              neckType: dataToSave.neckType || 'Classic Elegant',
+              careInstructions: dataToSave.careInstructions,
+              status: 'PUBLISHED',
+              featured: true,
+              isNewArrival: true,
+              isTrending: true,
+              sourcingType: 'MEESHO',
+              supplierStatus: 'VERIFIED',
+              supplierSourceUrl: cleanUrl,
+              supplierNotes: `Auto-imported from Meesho link: ${cleanUrl}. Product ID: ${validation.sourceProductId}`,
+              supplierVerificationDate: new Date(),
             },
           });
-        }
 
-        // 4. Create ProductImportJob
-        await tx.productImportJob.create({
-          data: {
-            sourceUrl: validation.cleanUrl || targetUrl,
-            sourcePlatform: 'MEESHO',
-            status: 'COMPLETED',
-            draftProductId: prod.id,
-            importNotes: `Successfully auto-imported & published to live storefront. Sourcing cost: ₹${((dataToSave.costPricePaise || 49900) / 100).toFixed(0)}, Selling price: ₹${(prod.pricePaise / 100).toFixed(0)}`,
-          },
-        });
-
-        // 5. Create ResellingProduct entry for supplier fulfillment tracking
-        const supplierSource = await tx.supplierSource.findFirst();
-        if (supplierSource) {
-          await tx.resellingProduct.create({
+          // Create Media
+          await tx.productMedia.create({
             data: {
               productId: prod.id,
-              supplierSourceId: supplierSource.id,
-              supplierUrl: validation.cleanUrl || targetUrl,
-              supplierCostPaise: Number(dataToSave.costPricePaise) || 49900,
-              estShippingCostPaise: 7000,
-              estPackagingCostPaise: 3000,
-              stockVerifiedAt: new Date(),
-              priceVerifiedAt: new Date(),
+              url: coverImg,
+              altText: `${prod.name} - Front View`,
+              sortOrder: 0,
+              isCover: true,
             },
           });
+
+          // Create Variants safely with collision-free SKUs
+          for (const v of rawVariants) {
+            let variantSku = `XV-${prod.slug.slice(0, 10).toUpperCase()}-${String(v.size).toUpperCase().replace(/[^A-Z0-9]/g, '')}`;
+            const skuCollision = await tx.productVariant.findUnique({ where: { sku: variantSku } });
+            if (skuCollision) {
+              variantSku = `${variantSku}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+            }
+
+            await tx.productVariant.create({
+              data: {
+                productId: prod.id,
+                size: String(v.size),
+                sku: variantSku,
+                colorName: 'Standard',
+                costPricePaise: Number(dataToSave.costPricePaise) || 49900,
+                sellingPricePaise: Number(dataToSave.pricePaise) || prod.pricePaise,
+                stockCount: Number(v.stockCount) || 20,
+                available: true,
+                status: 'ACTIVE',
+              },
+            });
+          }
+
+          // Create Import Job
+          await tx.productImportJob.create({
+            data: {
+              sourceUrl: cleanUrl,
+              sourcePlatform: 'MEESHO',
+              status: 'COMPLETED',
+              draftProductId: prod.id,
+              importNotes: `Successfully imported & published. Sourcing cost: ₹${((dataToSave.costPricePaise || 49900) / 100).toFixed(0)}, Selling price: ₹${(prod.pricePaise / 100).toFixed(0)}`,
+            },
+          });
+
+          // Supplier source
+          const supplierSource = await tx.supplierSource.findFirst();
+          if (supplierSource) {
+            await tx.resellingProduct.create({
+              data: {
+                productId: prod.id,
+                supplierSourceId: supplierSource.id,
+                supplierUrl: cleanUrl,
+                supplierCostPaise: Number(dataToSave.costPricePaise) || 49900,
+                estShippingCostPaise: 7000,
+                estPackagingCostPaise: 3000,
+                stockVerifiedAt: new Date(),
+                priceVerifiedAt: new Date(),
+              },
+            });
+          }
         }
 
         return prod;
       });
 
-      // Cache in memory for immediate access in current container
+      // Synchronize in memory for immediate access in current container
       try {
         CatalogService.addProductToMemory({
-          id: createdProduct.id,
-          name: createdProduct.name,
-          slug: createdProduct.slug,
-          description: createdProduct.description,
-          shortDescription: createdProduct.shortDescription || undefined,
-          gender: createdProduct.gender as any,
-          pricePaise: createdProduct.pricePaise,
-          compareAtPricePaise: createdProduct.compareAtPricePaise || undefined,
-          costPricePaise: createdProduct.costPricePaise || 0,
-          material: createdProduct.fabric || undefined,
-          fit: createdProduct.fit || undefined,
-          pattern: createdProduct.pattern || undefined,
-          care: createdProduct.careInstructions || undefined,
-          featured: Boolean(createdProduct.featured),
-          isNewArrival: Boolean(createdProduct.isNewArrival),
-          isTrending: Boolean(createdProduct.isTrending),
-          status: createdProduct.status,
-          category: createdProduct.categoryId,
+          id: savedProduct.id,
+          name: savedProduct.name,
+          slug: savedProduct.slug,
+          description: savedProduct.description,
+          shortDescription: savedProduct.shortDescription || undefined,
+          gender: savedProduct.gender as any,
+          pricePaise: savedProduct.pricePaise,
+          compareAtPricePaise: savedProduct.compareAtPricePaise || undefined,
+          costPricePaise: savedProduct.costPricePaise || 0,
+          material: savedProduct.fabric || undefined,
+          fit: savedProduct.fit || undefined,
+          pattern: savedProduct.pattern || undefined,
+          care: savedProduct.careInstructions || undefined,
+          featured: Boolean(savedProduct.featured),
+          isNewArrival: Boolean(savedProduct.isNewArrival),
+          isTrending: Boolean(savedProduct.isTrending),
+          status: savedProduct.status,
+          category: savedProduct.categoryId,
           categoryName: 'Collection',
           sourcing: 'meesho',
           supplierStatus: 'VERIFIED',
-          supplierSourceUrl: validation.cleanUrl,
-          images: [{ url: dataToSave.coverImage || '/media/products/women-1.jpg', alt: createdProduct.name, isCover: true }],
+          supplierSourceUrl: cleanUrl,
+          images: [{ url: coverImg, alt: savedProduct.name, isCover: true }],
           variants: [
-            { sku: `XV-${createdProduct.slug.toUpperCase()}-S`, size: 'S', colorName: 'Standard', stock: 15 },
-            { sku: `XV-${createdProduct.slug.toUpperCase()}-M`, size: 'M', colorName: 'Standard', stock: 25 },
-            { sku: `XV-${createdProduct.slug.toUpperCase()}-L`, size: 'L', colorName: 'Standard', stock: 20 },
+            { sku: `XV-${savedProduct.slug.toUpperCase()}-S`, size: 'S', colorName: 'Standard', stock: 15 },
+            { sku: `XV-${savedProduct.slug.toUpperCase()}-M`, size: 'M', colorName: 'Standard', stock: 25 },
+            { sku: `XV-${savedProduct.slug.toUpperCase()}-L`, size: 'L', colorName: 'Standard', stock: 20 },
           ],
         });
       } catch (cacheErr) {
@@ -243,7 +343,7 @@ export async function POST(req: NextRequest) {
         revalidatePath('/shop');
         revalidatePath('/women');
         revalidatePath('/men');
-        revalidatePath(`/product/${uniqueSlug}`);
+        revalidatePath(`/product/${savedProduct.slug}`);
         revalidatePath('/');
       } catch (e) {
         // dynamic routes will fetch fresh DB rows regardless
@@ -251,20 +351,14 @@ export async function POST(req: NextRequest) {
 
       return NextResponse.json({
         success: true,
-        message: 'Product successfully auto-filled, stored in backend, and published to live website!',
-        product: {
-          id: createdProduct.id,
-          name: createdProduct.name,
-          slug: createdProduct.slug,
-          pricePaise: createdProduct.pricePaise,
-          liveUrl: `/product/${createdProduct.slug}`,
-        },
+        message: existingProduct ? 'Product details updated and re-synced successfully!' : 'Product imported and published to live storefront!',
+        product: savedProduct,
       });
     }
 
-    return NextResponse.json({ error: 'Invalid action specified.' }, { status: 400 });
+    return NextResponse.json({ error: 'Invalid action requested' }, { status: 400 });
   } catch (err: any) {
-    console.error('[API /api/admin/products/import/meesho] Error:', err);
-    return NextResponse.json({ error: err.message || 'Import failed.' }, { status: 500 });
+    console.error('Error in Meesho import API:', err);
+    return NextResponse.json({ error: err.message || 'Failed to process Meesho product' }, { status: 500 });
   }
 }

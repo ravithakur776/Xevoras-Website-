@@ -6,6 +6,8 @@
  * precise silhouettes, fabrics, occasions, size matrices, and high-resolution photography.
  */
 
+import { normalizeImageUrl } from '../utils/image';
+
 export interface MeeshoValidationResult {
   valid: boolean;
   error?: string;
@@ -405,7 +407,7 @@ Fabrication & Care:
     const slug = `${cleanBaseSlug}-${prodId.toLowerCase()}`;
 
     // 12. Accurate Image Selection (Matching Garment Type Exactly)
-    let coverImage = customImageUrl;
+    let coverImage = customImageUrl ? normalizeImageUrl(customImageUrl) : undefined;
     let galleryImages: string[] = [];
 
     if (!coverImage) {

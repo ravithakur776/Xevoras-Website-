@@ -1,9 +1,8 @@
-import { PrismaClient } from '@prisma/client';
 import fs from 'fs';
 import path from 'path';
 
-// Helper to determine the best database URL
-function getDatabaseUrl(): string {
+// 1. Guarantee process.env.DATABASE_URL is always defined before Prisma loads
+function initializeDatabaseEnvironment(): string {
   if (process.env.DATABASE_URL && process.env.DATABASE_URL.trim() !== '') {
     return process.env.DATABASE_URL;
   }
@@ -13,7 +12,6 @@ function getDatabaseUrl(): string {
 
   if (isServerless) {
     const tmpDbPath = '/tmp/dev.db';
-    // If bundled db exists and /tmp/dev.db doesn't, copy it to writable /tmp
     try {
       if (fs.existsSync(bundledDbPath) && !fs.existsSync(tmpDbPath)) {
         fs.copyFileSync(bundledDbPath, tmpDbPath);
@@ -23,16 +21,18 @@ function getDatabaseUrl(): string {
     }
     const targetPath = fs.existsSync(tmpDbPath) ? tmpDbPath : bundledDbPath;
     const url = `file:${targetPath}`;
-    process.env.DATABASE_URL = url;
+    process.env['DATABASE_URL'] = url;
     return url;
   }
 
   const localUrl = `file:${bundledDbPath}`;
-  process.env.DATABASE_URL = localUrl;
+  process.env['DATABASE_URL'] = localUrl;
   return localUrl;
 }
 
-const dbUrl = getDatabaseUrl();
+const dbUrl = initializeDatabaseEnvironment();
+
+import { PrismaClient } from '@prisma/client';
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
