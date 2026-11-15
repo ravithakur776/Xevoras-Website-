@@ -4,6 +4,7 @@ import { MeeshoAdapter } from '@/lib/adapters/meesho.adapter';
 import { prisma } from '@/lib/db/prisma';
 import { revalidatePath } from 'next/cache';
 import { CatalogueSyncService } from '@/lib/services/catalogueSync.service';
+import { CatalogService } from '@/lib/services/catalog.service';
 
 export async function POST(req: NextRequest) {
   try {
@@ -194,8 +195,48 @@ export async function POST(req: NextRequest) {
         return prod;
       });
 
-      // Synchronize with catalogue.json for 100% data consistency
-      await CatalogueSyncService.syncPrismaToCatalogueJson();
+      // Cache in memory for immediate access in current container
+      try {
+        CatalogService.addProductToMemory({
+          id: createdProduct.id,
+          name: createdProduct.name,
+          slug: createdProduct.slug,
+          description: createdProduct.description,
+          shortDescription: createdProduct.shortDescription || undefined,
+          gender: createdProduct.gender as any,
+          pricePaise: createdProduct.pricePaise,
+          compareAtPricePaise: createdProduct.compareAtPricePaise || undefined,
+          costPricePaise: createdProduct.costPricePaise || 0,
+          material: createdProduct.fabric || undefined,
+          fit: createdProduct.fit || undefined,
+          pattern: createdProduct.pattern || undefined,
+          care: createdProduct.careInstructions || undefined,
+          featured: Boolean(createdProduct.featured),
+          isNewArrival: Boolean(createdProduct.isNewArrival),
+          isTrending: Boolean(createdProduct.isTrending),
+          status: createdProduct.status,
+          category: createdProduct.categoryId,
+          categoryName: 'Collection',
+          sourcing: 'meesho',
+          supplierStatus: 'VERIFIED',
+          supplierSourceUrl: validation.cleanUrl,
+          images: [{ url: dataToSave.coverImage || '/media/products/women-1.jpg', alt: createdProduct.name, isCover: true }],
+          variants: [
+            { sku: `XV-${createdProduct.slug.toUpperCase()}-S`, size: 'S', colorName: 'Standard', stock: 15 },
+            { sku: `XV-${createdProduct.slug.toUpperCase()}-M`, size: 'M', colorName: 'Standard', stock: 25 },
+            { sku: `XV-${createdProduct.slug.toUpperCase()}-L`, size: 'L', colorName: 'Standard', stock: 20 },
+          ],
+        });
+      } catch (cacheErr) {
+        // safe ignore
+      }
+
+      // Synchronize with catalogue.json for local persistence if writable
+      try {
+        await CatalogueSyncService.syncPrismaToCatalogueJson();
+      } catch (syncErr) {
+        // Ignored on read-only serverless filesystems
+      }
 
       // Revalidate cache for instant storefront updates
       try {
