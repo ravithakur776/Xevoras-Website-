@@ -1,0 +1,233 @@
+[
+  {
+    "id": "TC-C01",
+    "suite": "Customer",
+    "name": "Open Homepage",
+    "status": "PASS",
+    "details": "Title: \"XEVORAS — Always Rare | Premium Contemporary Fashion & 3D Avatar Studio\""
+  },
+  {
+    "id": "TC-C02",
+    "suite": "Customer",
+    "name": "Navigate Women Category",
+    "status": "PASS",
+    "details": "Heading: \"Women’s Collection\""
+  },
+  {
+    "id": "TC-C03",
+    "suite": "Customer",
+    "name": "Navigate Men Category",
+    "status": "PASS",
+    "details": "Heading: \"Men’s Collection\""
+  },
+  {
+    "id": "TC-C04",
+    "suite": "Customer",
+    "name": "Shop Category Filtering",
+    "status": "PASS",
+    "details": "Found 2 dress pieces"
+  },
+  {
+    "id": "TC-C05",
+    "suite": "Customer",
+    "name": "Open Product Detail Page",
+    "status": "PASS",
+    "details": "Product: \"The Column Gown\""
+  },
+  {
+    "id": "TC-C06",
+    "suite": "Customer",
+    "name": "Select Size Variant (M)",
+    "status": "PASS",
+    "details": "Variant Selected"
+  },
+  {
+    "id": "TC-C07",
+    "suite": "Customer",
+    "name": "Toggle Wishlist",
+    "status": "PASS",
+    "details": "Wishlist state updated"
+  },
+  {
+    "id": "TC-C08",
+    "suite": "Customer",
+    "name": "Add Product to Shopping Bag",
+    "status": "PASS",
+    "details": "Item added to cart context"
+  },
+  {
+    "id": "TC-C09",
+    "suite": "Customer",
+    "name": "Open Cart Drawer",
+    "status": "PASS",
+    "details": "Drawer open: true"
+  },
+  {
+    "id": "TC-C10",
+    "suite": "Customer",
+    "name": "Open Checkout Page",
+    "status": "PASS",
+    "details": "Checkout form loaded"
+  },
+  {
+    "id": "TC-C11",
+    "suite": "Customer",
+    "name": "Apply Coupon Code (RARE10)",
+    "status": "PASS",
+    "details": "Discount calculated"
+  },
+  {
+    "id": "TC-C12",
+    "suite": "Customer",
+    "name": "Submit Order (COD Flow)",
+    "status": "PASS",
+    "details": "Order Confirmed: XV-77866"
+  },
+  {
+    "id": "TC-A01",
+    "suite": "Admin",
+    "name": "Authenticate Session & Load Dashboard",
+    "status": "PASS",
+    "details": "Overview visible: true"
+  },
+  {
+    "id": "TC-A02",
+    "suite": "Admin",
+    "name": "Inspect Product Matrix",
+    "status": "PASS",
+    "details": "Found 19 products in DB table"
+  },
+  {
+    "id": "TC-A03",
+    "suite": "Admin",
+    "name": "Inspect Order Processing Desk",
+    "status": "PASS",
+    "details": "Found 0 database orders"
+  },
+  {
+    "id": "TC-A04",
+    "suite": "Admin",
+    "name": "Open Meesho Reselling Manager",
+    "status": "PASS",
+    "details": "Heading: \"Meesho & Supplier Reselling Manager\""
+  },
+  {
+    "id": "TC-A05",
+    "suite": "Admin",
+    "name": "Interactive Margin Calculator",
+    "status": "PASS",
+    "details": "Formula verified in real time"
+  },
+  {
+    "id": "TC-F01",
+    "suite": "AvatarStudio",
+    "name": "Load 3D Fashion Atelier",
+    "status": "PASS",
+    "details": "Heading: \"XEVORAS 3D Avatar Studio\""
+  },
+  {
+    "id": "TC-F02",
+    "suite": "AvatarStudio",
+    "name": "Toggle Male V-Taper Model",
+    "status": "PASS",
+    "details": "Procedural geometry updated"
+  },
+  {
+    "id": "TC-F03",
+    "suite": "AvatarStudio",
+    "name": "Adjust Height Slider (182cm)",
+    "status": "PASS",
+    "details": "Height scaled linearly"
+  },
+  {
+    "id": "TC-F04",
+    "suite": "AvatarStudio",
+    "name": "Camera Slerp Interpolation (Profile)",
+    "status": "PASS",
+    "details": "Camera moved to lateral view"
+  },
+  {
+    "id": "TC-F05",
+    "suite": "AvatarStudio",
+    "name": "Camera Framing (Close-Up)",
+    "status": "PASS",
+    "details": "Camera framed neckline & collar"
+  },
+  {
+    "id": "TC-F06",
+    "suite": "AvatarStudio",
+    "name": "Switch Category to Weighted Shirts",
+    "status": "PASS",
+    "details": "Crisp shirt & trousers attached"
+  },
+  {
+    "id": "TC-F07",
+    "suite": "AvatarStudio",
+    "name": "Select Available Size (L)",
+    "status": "PASS",
+    "details": "Size L active"
+  },
+  {
+    "id": "TC-F08",
+    "suite": "AvatarStudio",
+    "name": "Save Look to Local Library",
+    "status": "PASS",
+    "details": "Look saved in localStorage"
+  },
+  {
+    "id": "TC-F09",
+    "suite": "AvatarStudio",
+    "name": "Add Look to Bag with Real Product Data",
+    "status": "PASS",
+    "details": "Real item added to cart"
+  },
+  {
+    "id": "TC-V01",
+    "suite": "VirtualTryOn",
+    "name": "Load AI Virtual Try-On Studio",
+    "status": "PASS",
+    "details": "Heading: \"AI Virtual Try-On\""
+  },
+  {
+    "id": "TC-V02",
+    "suite": "VirtualTryOn",
+    "name": "Privacy Consent Gating",
+    "status": "PASS",
+    "details": "Consent initially false: true"
+  },
+  {
+    "id": "TC-V03",
+    "suite": "VirtualTryOn",
+    "name": "Acknowledge Privacy Consent",
+    "status": "PASS",
+    "details": "Consent verified"
+  },
+  {
+    "id": "TC-V04",
+    "suite": "VirtualTryOn",
+    "name": "Audition Garment Selection",
+    "status": "PASS",
+    "details": "Garment audition item selected"
+  },
+  {
+    "id": "TC-M01",
+    "suite": "Mobile",
+    "name": "Mobile Homepage Render (390px)",
+    "status": "PASS",
+    "details": "Clean responsive hero & cards"
+  },
+  {
+    "id": "TC-M02",
+    "suite": "Mobile",
+    "name": "Mobile Avatar Studio Segmented Control",
+    "status": "PASS",
+    "details": "Tab bar visible: true"
+  },
+  {
+    "id": "TC-M03",
+    "suite": "Mobile",
+    "name": "Mobile Checkout Layout",
+    "status": "PASS",
+    "details": "Single-column responsive form"
+  }
+]

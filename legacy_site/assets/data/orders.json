@@ -1,0 +1,76 @@
+[
+  {
+    "id": "cmwhycy9a000jorameygk196x",
+    "orderNumber": "XV-81012",
+    "createdAt": "2026-11-15T14:51:21.070Z",
+    "customer": {
+      "fullName": "demo",
+      "email": "demo@gmail.com",
+      "phone": "8989769899",
+      "addressLine1": "demo",
+      "addressLine2": "",
+      "city": "demo",
+      "state": "demo",
+      "pincode": "281006",
+      "country": "India"
+    },
+    "items": [
+      {
+        "id": "cmwhycy9a000koram1ow35c7m",
+        "orderId": "cmwhycy9a000jorameygk196x",
+        "variantId": null,
+        "productName": "Comfy Retro Women Jeans",
+        "slug": "comfy-retro-women-jeans-8ouk4u",
+        "sku": "XV-JEAN-8OUK4U-26",
+        "size": "26",
+        "color": "Standard",
+        "imageUrl": "https://images.meesho.com/images/products/525465966/wxhm2_512.avif?width=512",
+        "quantity": 1,
+        "unitPricePaise": 52000,
+        "totalPricePaise": 52000,
+        "sourcingType": "MEESHO",
+        "supplierCostPaise": null
+      }
+    ],
+    "totalPaise": 52000,
+    "status": "CONFIRMED",
+    "paymentMethod": "COD"
+  },
+  {
+    "id": "cmwhy9dsv0000oramj1d8rr5d",
+    "orderNumber": "XV-69930",
+    "createdAt": "2026-11-15T14:48:34.590Z",
+    "customer": {
+      "fullName": "demo",
+      "email": "demo@gmail.com",
+      "phone": "99999999999",
+      "addressLine1": "demo",
+      "addressLine2": "",
+      "city": "demo",
+      "state": "demo",
+      "pincode": "281006",
+      "country": "India"
+    },
+    "items": [
+      {
+        "id": "cmwhy9dsv0001orammho1gwvb",
+        "orderId": "cmwhy9dsv0000oramj1d8rr5d",
+        "variantId": null,
+        "productName": "Preety Women Lower Trackpant Women Palazzo Pack 2",
+        "slug": "preety-women-lower-trackpant-women-palazzo-pack-2-8swzgj",
+        "sku": "XV-TRS-8SWZGJ-M",
+        "size": "M",
+        "color": "Standard",
+        "imageUrl": "https://images.meesho.com/images/products/532297603/vjbwn_512.avif?width=512",
+        "quantity": 1,
+        "unitPricePaise": 86700,
+        "totalPricePaise": 86700,
+        "sourcingType": "MEESHO",
+        "supplierCostPaise": null
+      }
+    ],
+    "totalPaise": 86700,
+    "status": "CONFIRMED",
+    "paymentMethod": "COD"
+  }
+]

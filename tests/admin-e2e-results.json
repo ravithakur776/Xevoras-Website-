@@ -1,0 +1,115 @@
+{
+  "passed": 18,
+  "failed": 0,
+  "total": 18,
+  "results": [
+    {
+      "id": "TC-01",
+      "name": "Admin Login & Session Verification",
+      "status": "PASS",
+      "details": "Token generated: xevoras_admin_token=eyJ1c2VySW..."
+    },
+    {
+      "id": "TC-02",
+      "name": "Access Protection on /api/admin/*",
+      "status": "PASS",
+      "details": "Unauthenticated request correctly returned 401 Unauthorized"
+    },
+    {
+      "id": "TC-03",
+      "name": "Meesho URL Validation & Security Rejection",
+      "status": "PASS",
+      "details": "Non-HTTPS & foreign SSRF blocked; valid Meesho link accepted: cleanUrl=\"https://www.meesho.com/women-embroidered-anarkali-kurta-set/p/8k9x1\""
+    },
+    {
+      "id": "TC-04",
+      "name": "Source Link Saved in Database (ProductImportJob)",
+      "status": "PASS",
+      "details": "Job ID: cmwhq43lo0000or597y33dr37, sourceUrl saved persistently"
+    },
+    {
+      "id": "TC-07",
+      "name": "Image Upload API & Storage Persistence",
+      "status": "PASS",
+      "details": "Image saved to /uploads/products/e2e-velvet-couture-sample-a7cb61548164490c2e34650f0bd3ec31.png, file exists on disk: true"
+    },
+    {
+      "id": "TC-08",
+      "name": "Image Cover Setting & Reordering",
+      "status": "PASS",
+      "details": "Primary cover flagged with displayOrder 0, secondary at order 1"
+    },
+    {
+      "id": "TC-09",
+      "name": "Variant Creation with Unique SKUs",
+      "status": "PASS",
+      "details": "3 variants defined: XEV-DRAFT-S-1794740431178, XEV-DRAFT-M-1794740431178, XEV-DRAFT-L-1794740431178"
+    },
+    {
+      "id": "TC-10",
+      "name": "Price & Real-Time Margin Calculations",
+      "status": "PASS",
+      "details": "Cost: ₹450 + Pack: ₹40 + Ship: ₹70 = ₹560. Sell: ₹1899 => Margin: ₹1339 (70.5%)"
+    },
+    {
+      "id": "TC-05",
+      "name": "Draft Product Creation",
+      "status": "PASS",
+      "details": "Draft product created with ID: cmwhq43md0003or59cz5fjqbr, status=\"DRAFT\""
+    },
+    {
+      "id": "TC-11",
+      "name": "Save as Draft Exclusion from Storefront",
+      "status": "PASS",
+      "details": "Draft product cmwhq43md0003or59cz5fjqbr confirmed absent from live /api/products catalog"
+    },
+    {
+      "id": "TC-06",
+      "name": "Manual Dress & Clothing Data Entry",
+      "status": "PASS",
+      "details": "Structured garment specifications, fabric, occasion, and variants verified"
+    },
+    {
+      "id": "TC-12",
+      "name": "Publish Product Directly on XEVORAS",
+      "status": "PASS",
+      "details": "Product published with ID: cmwhq43n2000gor593a0pq1w7, status=\"PUBLISHED\""
+    },
+    {
+      "id": "TC-13",
+      "name": "Storefront Reflection (Instant Catalog Sync)",
+      "status": "PASS",
+      "details": "Newly published piece \"XEVORAS Atelier Raw Silk Gala Gown\" immediately retrieved from live /api/products (Price: ₹6800)"
+    },
+    {
+      "id": "TC-14",
+      "name": "Product Detail Page Resolution (/product/[slug])",
+      "status": "PASS",
+      "details": "PDP loaded successfully for /product/xev-exclusive-raw-silk-dress-1794740431209 with title, variants, and imagery"
+    },
+    {
+      "id": "TC-15",
+      "name": "Edit Product Details via /admin/products/[id]",
+      "status": "PASS",
+      "details": "Price updated to ₹7,200, tagline updated"
+    },
+    {
+      "id": "TC-16",
+      "name": "Duplicate Product Functionality",
+      "status": "PASS",
+      "details": "Cloned to new product: \"XEVORAS Atelier Raw Silk Gala Gown (Copy)\" with ID: cmwhq43pw000uor5909a217o0, status=\"DRAFT\""
+    },
+    {
+      "id": "TC-17",
+      "name": "Inventory & Supplier Status Desk",
+      "status": "PASS",
+      "details": "Supplier status set to AVAILABLE and stock updated"
+    },
+    {
+      "id": "TC-18",
+      "name": "CSV Catalogue Export & Batch Import",
+      "status": "PASS",
+      "details": "CSV exported (5105 bytes) and batch import parsed and created 1 product"
+    }
+  ]
+}
