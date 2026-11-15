@@ -120,6 +120,12 @@ export function Footer() {
                 <span className="text-[8px] px-1 bg-gold/20 text-gold rounded font-bold">AI</span>
               </Link>
             </li>
+            <li>
+              <Link href="/app" className="hover:text-gold transition-colors flex items-center gap-1.5 text-gold font-bold">
+                <span>📲 Mobile App</span>
+                <span className="text-[8px] px-1 bg-gold text-obsidian rounded font-bold">INSTALL</span>
+              </Link>
+            </li>
             <li><Link href="/size-guide" className="hover:text-gold transition-colors">Fit &amp; Size Guide</Link></li>
             <li><Link href="/account" className="hover:text-gold transition-colors">Saved Looks</Link></li>
             <li><Link href="/admin" className="text-stone/40 hover:text-gold transition-colors">Admin Portal</Link></li>

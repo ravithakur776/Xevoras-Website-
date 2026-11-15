@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Search, ShoppingBag, Heart, User, Menu, X, Sparkles, Box } from 'lucide-react';
+import { Search, ShoppingBag, Heart, User, Menu, X, Sparkles, Box, Download } from 'lucide-react';
 import { useCart } from '@/lib/store/cartContext';
 import { useWishlist } from '@/lib/store/wishlistContext';
 import { SearchModal } from './SearchModal';
@@ -438,6 +438,20 @@ export function Navbar() {
                     )}
                   </Link>
                 ))}
+
+                <Link
+                  href="/app"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-between text-base font-bold tracking-wide text-gold py-2.5 px-3 rounded-xl bg-gold/10 border border-gold/30 mt-2"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Download size={18} className="text-gold" />
+                    <span>Download App</span>
+                  </div>
+                  <span className="text-[10px] px-2 py-0.5 bg-gold text-obsidian rounded-full font-sans font-bold">
+                    1-Click
+                  </span>
+                </Link>
               </div>
             </div>
 

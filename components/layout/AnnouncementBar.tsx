@@ -28,6 +28,10 @@ export function AnnouncementBar() {
           <Link href="/virtual-try-on" className="hover:text-gold transition-colors">
             AI Try-On
           </Link>
+          <span className="text-stone/40">·</span>
+          <Link href="/app" className="text-gold hover:text-gold-light transition-colors font-bold flex items-center gap-1">
+            <span>📲 Get App</span>
+          </Link>
         </div>
       </div>
     </div>

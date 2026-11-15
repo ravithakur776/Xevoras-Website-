@@ -7,6 +7,8 @@ import { Navbar } from '@/components/layout/Navbar';
 import { CartDrawer } from '@/components/layout/CartDrawer';
 import { Footer } from '@/components/layout/Footer';
 import { BrandIntroModal } from '@/components/storefront/BrandIntroModal';
+import { PwaRegister } from '@/components/pwa/PwaRegister';
+import { AppInstallPrompt } from '@/components/pwa/AppInstallPrompt';
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://xevoras.com'),
@@ -42,7 +44,13 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: '/favicon.png',
-    apple: '/favicon.png',
+    apple: '/apple-touch-icon.png',
+  },
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'XEVORAS',
   },
 };
 
@@ -75,6 +83,8 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen bg-obsidian text-ivory flex flex-col antialiased selection:bg-gold selection:text-obsidian">
+        <PwaRegister />
+        <AppInstallPrompt />
         <BrandIntroModal />
         <CartProvider>
           <WishlistProvider>
