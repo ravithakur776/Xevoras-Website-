@@ -1,7 +1,6 @@
 import { INITIAL_CATEGORIES, INITIAL_PRODUCTS } from '../data/initialCatalog';
 import { Category, Product } from '../types';
 import { prisma } from '../db/prisma';
-import { MeeshoAdapter } from '../adapters/meesho.adapter';
 
 // In-memory fallback state
 let categoriesStore: Category[] = [...INITIAL_CATEGORIES];
@@ -114,8 +113,7 @@ export class CatalogService {
   }
 
   /**
-   * Fetches a single live product by slug or id from the database,
-   * with automatic on-the-fly hydration for Meesho products to guarantee 0% 404s.
+   * Fetches a single live product by slug or id from the database or verified product store.
    */
   public static async getLiveProductBySlug(slug: string): Promise<Product | undefined> {
     if (!slug) return undefined;
@@ -142,67 +140,9 @@ export class CatalogService {
       console.warn('Database slug query error:', err);
     }
 
-    // 2. In-Memory Store Check
-    const memoryMatch = productsStore.find((item) => item.slug === slug || item.id === slug);
-    if (memoryMatch) return memoryMatch;
-
-    // 3. Resilient Auto-Hydration for Meesho Sourced Slugs (e.g. men-colorblock-casual-jacket-78jujd)
-    const meeshoSlugMatch = slug.match(/^([a-z0-9-]+?)-([a-z0-9]{4,10})$/i);
-    if (meeshoSlugMatch) {
-      try {
-        const rawTitle = meeshoSlugMatch[1];
-        const prodId = meeshoSlugMatch[2];
-        const reconstructedUrl = `https://www.meesho.com/${rawTitle}/p/${prodId}`;
-        const auto = MeeshoAdapter.parseAndGenerateProduct(reconstructedUrl);
-        if (auto) {
-          const hydratedProduct: Product = {
-            id: `prod_meesho_${prodId}`,
-            name: auto.name,
-            slug: slug,
-            description: auto.description,
-            shortDescription: `${auto.fabric} · ${auto.fit} · Always Rare`,
-            gender: auto.gender,
-            pricePaise: auto.pricePaise,
-            compareAtPricePaise: auto.compareAtPricePaise,
-            costPricePaise: auto.costPricePaise,
-            material: auto.fabric,
-            fit: auto.fit,
-            pattern: auto.pattern,
-            care: auto.careInstructions,
-            featured: true,
-            isNewArrival: true,
-            isTrending: true,
-            status: 'PUBLISHED',
-            category: auto.categoryId,
-            categoryName: auto.categoryName,
-            sourcing: 'meesho',
-            supplierStatus: 'VERIFIED',
-            supplierSourceUrl: reconstructedUrl,
-            images: [
-              { url: auto.coverImage, alt: auto.name, isCover: true },
-              ...(auto.galleryImages || []).map((img) => ({ url: img, alt: auto.name })),
-            ],
-            variants: auto.variants.map((v) => ({
-              id: v.sku,
-              sku: v.sku,
-              size: v.size,
-              colorName: 'Standard',
-              stock: v.stockCount,
-              costPricePaise: auto.costPricePaise,
-              sellingPricePaise: auto.pricePaise,
-              status: 'ACTIVE',
-              availabilityMode: 'OWN_VERIFIED',
-            })),
-          };
-
-          // Cache in memory for this container
-          this.addProductToMemory(hydratedProduct);
-          return hydratedProduct;
-        }
-      } catch (adapterErr) {
-        console.warn('Could not auto-hydrate Meesho product from slug:', adapterErr);
-      }
-    }
+    // 2. Real In-Memory / Verified Store Check
+    const match = productsStore.find((item) => item.slug === slug || item.id === slug);
+    if (match) return match;
 
     return undefined;
   }

@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { prisma } from '@/lib/db/prisma';
+import { prisma } from '../db/prisma';
 
 const CATALOGUE_FILE_PATH = path.join(process.cwd(), 'legacy_site/assets/data/catalogue.json');
 const PUBLIC_CATALOGUE_PATH = path.join(process.cwd(), 'public/data/catalogue.json');

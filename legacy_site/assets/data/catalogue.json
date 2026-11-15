@@ -75,6 +75,71 @@
   ],
   "products": [
     {
+      "id": "cmwi22duy0001ord2swvfshhb",
+      "name": "Men Colorblock Casual Jacket",
+      "slug": "men-colorblock-casual-jacket-78jujd",
+      "description": "Crafted with uncompromising precision, the Men Colorblock Casual Jacket embodies XEVORAS's philosophy of 'Always Rare · हटके हमेशा'.\n\nSilhouette & Design:\n• Cut in Premium Verified Apparel Fabrication with a flattering comfort tailored luxury fit.\n• Detailed with refined detailing engineered for modern luxury styling.\n• Tailored specifically for contemporary casual luxury.\n\nFabrication & Care:\n• Material: High-grade textile curated for exceptional drape, durability, and breathability.\n• Care: Dry clean recommended or machine wash cold inside out. Steam press gently.\n• Origin: Verified Indian artisan cluster, curated and authenticated by the XEVORAS Sourcing Atelier.",
+      "shortDescription": "Premium Verified Apparel Fabrication · Comfort Tailored Luxury Fit · Always Rare",
+      "gender": "men",
+      "pricePaise": 139900,
+      "compareAtPricePaise": 293790,
+      "material": "Premium Verified Apparel Fabrication",
+      "fit": "Comfort Tailored Luxury Fit",
+      "pattern": "Refined Detailing",
+      "care": "Dry clean recommended or machine wash cold. Steam iron on reverse.",
+      "keywords": "men colorblock casual jacket men xevoras",
+      "featured": true,
+      "category": "men-outerwear",
+      "categoryName": "Outerwear",
+      "images": [
+        {
+          "url": "/media/products/men-5.jpg",
+          "alt": "Men Colorblock Casual Jacket - Front View"
+        }
+      ],
+      "variants": [
+        {
+          "sku": "XV-JKT-78JUJD-S",
+          "size": "S",
+          "colorName": "Standard",
+          "colorHex": "#17140f",
+          "stock": 15
+        },
+        {
+          "sku": "XV-JKT-78JUJD-M",
+          "size": "M",
+          "colorName": "Standard",
+          "colorHex": "#17140f",
+          "stock": 25
+        },
+        {
+          "sku": "XV-JKT-78JUJD-L",
+          "size": "L",
+          "colorName": "Standard",
+          "colorHex": "#17140f",
+          "stock": 30
+        },
+        {
+          "sku": "XV-JKT-78JUJD-XL",
+          "size": "XL",
+          "colorName": "Standard",
+          "colorHex": "#17140f",
+          "stock": 20
+        },
+        {
+          "sku": "XV-JKT-78JUJD-XXL",
+          "size": "XXL",
+          "colorName": "Standard",
+          "colorHex": "#17140f",
+          "stock": 10
+        }
+      ],
+      "status": "published",
+      "sourcingType": "MEESHO",
+      "supplierSourceUrl": "https://www.meesho.com/men-colorblock-casual-jacket/p/78jujd",
+      "costPricePaise": 39900
+    },
+    {
       "id": "cmwhybtey0003oram3rlnao4d",
       "name": "Comfy Retro Women Jeans",
       "slug": "comfy-retro-women-jeans-8ouk4u",
@@ -212,5 +277,5 @@
       "costPricePaise": 43100
     }
   ],
-  "lastUpdated": "2026-11-15T15:34:06.150Z"
+  "lastUpdated": "2026-11-15T16:37:19.075Z"
 }
